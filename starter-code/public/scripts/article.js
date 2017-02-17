@@ -40,20 +40,20 @@ Article.prototype.toHtml = function() {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW of Article.loadAll();
+ * - A method that grabs all of the rows from the database and pushes them into the Article array.
+ * - Inputs: Takes an input of rows; Is called in Article.fetchAll
+ * - Outputs: A new Article object that is then put into an array.
  */
 Article.loadAll = function(rows) {
-  // TODO: describe what the following code is doing
+  // DONE: Grabs two published dates from the article data and compares them to see which one is newer. It will then order them to display the newest article first.
   rows.sort(function(a,b) {
     return (new Date(b.publishedOn)) - (new Date(a.publishedOn));
   });
 
-  // TODO: describe what the following code is doing
+  // DONE: Loop through each row and pushing the Article objects into an array.
   rows.forEach(function(ele) {
     Article.all.push(new Article(ele));
   })
@@ -61,25 +61,25 @@ Article.loadAll = function(rows) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW of Article.fetchAll();
+ * - This callback function is retreiving the articles table and checking if the hackerIpsum.json file has been loaded into it.  If it has, it will load the results of the table.  If it has not, then it will insert the information into the table.
+ * - Inputs: Takes an argument of callback.
+ * - Outputs: If the articles table exists it will call the Article.loadAll method.  If the article table does not exist it populate the table and then call itself to be run again.
  */
 Article.fetchAll = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: Access the database table called articles.
   $.get('/articles')
-  // TODO: describe what the following code is doing
+  // DONE: Use .then to chain together another function to run after .get
   .then(
     function(results) {
       if (results.length) { // If records exist in the DB
-        // TODO: describe what the following code is doing
+        // DONE: Run the loadAll function with the argument results
         Article.loadAll(results);
         callback();
       } else { // if NO records exist in the DB
-        // TODO: describe what the following code is doing
+        // DONE: Grabs the JSON file hackerIpsum and then loops through the file to create new Article objects.  It then calls the method article.insertRecord to add the Article objects to the database.
         $.getJSON('./data/hackerIpsum.json')
         .then(function(rawData) {
           rawData.forEach(function(item) {
@@ -87,11 +87,11 @@ Article.fetchAll = function(callback) {
             article.insertRecord(); // Add each record to the DB
           })
         })
-        // TODO: describe what the following code is doing
+        // DONE: We are then recalling the callback function fetchAll with the argument of callback to rerun the first part of the if/else statement.
         .then(function() {
           Article.fetchAll(callback);
         })
-        // TODO: describe what the following code is doing
+        // DONE: .catch is only run if the fetchAll promise has been rejected. It will return a console error.
         .catch(function(err) {
           console.error(err);
         });
@@ -102,20 +102,20 @@ Article.fetchAll = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW of Article.truncateTable();
+ * - Makes an AJAX call to delete the table articles and then console log the task has been completed
+ * - Inputs: Takes an argument of callback and is not being called at this time.
+ * - Outputs: The removal of the database table articles and console logs its completion
  */
 Article.truncateTable = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: Making an AJAX request to the database articles and providing a method of DELETE that would remove the table
   $.ajax({
     url: '/articles',
     method: 'DELETE',
   })
-  // TODO: describe what the following code is doing
+  // DONE: Will console log that the table deletion was successful.
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -124,17 +124,17 @@ Article.truncateTable = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW of Article.prototype.insertRecord();
+ * - This method posts the article data from the table articles and console logs its completion
+ * - Inputs: Takes in an argument of callback and being called in the callback function fetchAll
+ * - Outputs: The article data from the table articles and console logs the results
  */
 Article.prototype.insertRecord = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: This block of code is grabing a row from the articles database and posting it to the website
   $.post('/articles', {author: this.author, authorUrl: this.authorUrl, body: this.body, category: this.category, publishedOn: this.publishedOn, title: this.title})
-  // TODO: describe what the following code is doing
+  // DONE: If the post is succesful it will console log its completion.
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -143,20 +143,20 @@ Article.prototype.insertRecord = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW of Article.prototype.deleteRecord();
+ * - This method makes an AJAX to delete a selected article.
+ * - Inputs: Takes in argument of callback.  This method is not being called at this time.
+ * - Outputs: The output is a deletion of an article on index.html and console log of result of the function.
  */
 Article.prototype.deleteRecord = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: Make a AJAX request to delete the selected row on index.html
   $.ajax({
     url: `/articles/${this.article_id}`,
     method: 'DELETE'
   })
-  // TODO: describe what the following code is doing
+  // DONE: If the previous AJAX request was succesful it will console log its completion
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -165,15 +165,15 @@ Article.prototype.deleteRecord = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW of Article.prototype.updateRecord();
+ * - Makes an AJAX call to update the webpage with a new article and then console log its completion
+ * - Inputs: Takes an argument of callback and is not being called at this time.
+ * - Outputs: Updates the selected article data and console log the results
  */
 Article.prototype.updateRecord = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: Make an AJAX request from the articles database and push an updated article object to index.html
   $.ajax({
     url: `/articles/${this.article_id}`,
     method: 'PUT',
@@ -186,7 +186,7 @@ Article.prototype.updateRecord = function(callback) {
       title: this.title
     }
   })
-  // TODO: describe what the following code is doing
+  // DONE: If the AJAX request is successful it will console log that it has been completed.
   .then(function(data) {
     console.log(data);
     if (callback) callback();
