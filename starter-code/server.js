@@ -1,6 +1,6 @@
 'use strict';
-// TODO: Install and require the node postgres package into your server.js, and ensure that it's now a new dependency in your package.json
-// const pg = require('pg');
+// DONE: Install and require the Node postgres package 'pg' into your server.js, and ensure that it's now a new dependency in your package.json
+const pg = require('pg');
 const express = require('express');
 // REVIEW: Require in body-parser for post requests in our server
 const bodyParser = require('body-parser');
@@ -10,7 +10,7 @@ const app = express();
 // Windows and Linux users; You should have retained the user/pw from the pre-work for this course.
 // Your url may require that it's composed of additional information including user and password7
 // NOTE: Students will have varying URLs depending on their OS
-// const conString = 'postgres://localhost:5432';
+const conString = 'postgres://localhost:5432';
 // REVIEW: Pass the conString to pg, which creates a new client object
 const client = new pg.Client(conString);
 // REVIEW: Use the client object to connect to our DB.
@@ -69,7 +69,7 @@ app.post('/articles', function(request, response) {
 
 app.put('/articles/:id', function(request, response) {
   client.query(
-    ``, // TODO: Write the SQL query to update an existing record
+    ``, // TODO: Write the SQL query to update an existing record Hint....UPDATE
     [] // TODO: Get each value from the request's body
   );
   response.send('update complete');
@@ -85,7 +85,7 @@ app.delete('/articles/:id', function(request, response) {
 
 app.delete('/articles', function(request, response) {
   client.query(
-    '' // TODO: Write the SQl query to truncate the table
+    'DELETE FROM articles;' // TODO: Write the SQl query to truncate the table
   );
   response.send('Delete complete');
 });
